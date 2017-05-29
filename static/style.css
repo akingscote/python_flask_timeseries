@@ -1,0 +1,42 @@
+.table td, .table th {
+    border: 1px solid #ddd;
+    padding: 8px;
+	width:200px;
+	height:20px;
+	text-align:  center;
+}
+
+.table tr:nth-child(even){background-color: #f2f2f2;}
+
+.table tr:hover {background-color: #ddd;}
+
+.table th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: center;
+    /* background-color: #4CAF50; */
+    background-color: #636363;
+    color: white;
+}
+
+/* Small headline */
+.small_headline {
+	font-family: Gill Sans, Verdana;
+	font-size: 11px;
+	line-height: 14px;
+	text-transform: uppercase;
+	letter-spacing: 2px;
+	font-weight: bold;
+}
+ 
+/* Large Headline */
+.large_headline{
+	font-family: times, Times New Roman, times-roman, georgia, serif;
+	color: #444;
+	margin: 0;
+	padding: 0px 0px 6px 0px;
+	font-size: 51px;
+	line-height: 44px;
+	letter-spacing: -2px;
+	font-weight: bold;
+}

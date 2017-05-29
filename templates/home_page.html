@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+{% block title %}Stream{% endblock %}
+{% block head %}
+    {{ super() }}
+    <style type="text/css">
+        .important { color: #336699; }
+    </style>
+{% endblock %}
+{% block content %}
+
+	
+
+
+<div class="large_headline">Testing Streaming</div>
+
+<canvas id="myChart" width="900" height="400"></canvas>
+<script>
+window.onload = function() {
+  chart();
+};
+
+
+
+function chart(){
+	var now = new Date;
+	var now_secs = now.getTime();
+	var ctx = document.getElementById('myChart').getContext("2d");
+	var data = {
+		
+		datasets: [
+			{
+				data: [{ x: now-3600000, y: 1}
+					]
+			}
+		]
+	};
+	var option = {
+		animation: {
+			duration:500
+		},
+		
+		scales: {
+				xAxes: [{ type: 'time',
+						  unit: 'day',
+						  time: {
+								displayFormats: {
+												   'millisecond': 'hh:mm:ss a',
+												},
+								},
+						  ticks: {
+								autoSkip: true,
+								maxTicksLimit: 10,
+								
+						  },
+				
+						}]
+				},
+		
+		tooltips: {
+				callbacks: {
+				
+							label: function(tooltipItem){
+								var date = new Date(tooltipItem.xLabel);
+								tooltipItem.xLabel = date.toString();
+								return tooltipItem.yLabel + ' @ ' + tooltipItem.xLabel
+														},
+							
+							},
+							
+			
+				titleFontSize: 0,
+				},
+				
+				
+		legend: {
+				display: false,
+				},
+				
+		responsive:false,
+		maintainAspectRatio: false
+	};
+
+	var myLineChart = Chart.Line(ctx, {
+		type: 'line',
+		data: data,
+		options:option,
+	});
+	
+	
+	
+	setInterval(function(){
+		$.ajax({
+			async: false,
+			url : "get_data",
+			dataType: "json",
+			success : function (data) {
+			
+				var dateParts = data.timestamp.split(".")
+				date_test = new Date(dateParts[0].replace(/-/g,"/"));
+				var millisecs = date_test.getTime();
+				
+				
+				var chart_data_size = myLineChart.data.datasets[0].data.length;
+				var latest_element = myLineChart.data.datasets[0].data[chart_data_size-1];
+				var new_data = { x: millisecs, y: data.value };
+				
+				
+
+				if (JSON.stringify(latest_element) !== JSON.stringify(new_data)){
+						myLineChart.data.datasets[0].data.push(new_data);
+																				}
+
+				if (myLineChart.data.datasets[0].data.length >= 10){
+					myLineChart.data.datasets[0].data.splice(0, 1);
+				};
+				
+				myLineChart.update();
+				
+
+								}
+				});	
+
+      }, 2000);
+
+
+}
+
+</script>
+	
+	
+
+{% endblock %}
